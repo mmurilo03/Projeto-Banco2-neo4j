@@ -1,10 +1,30 @@
 const Point = require("../models/Point");
+const UserNeo4j = require("../models/UserNeo4j")
 const PointNeo4j = require("../models/PointNeo4j");
+const jwt = require("jsonwebtoken");
 
 const listarPontos = async (req, res) => {
-  const points = await Point.find()
+  let user;
+  const token = req.get("authorization");
+  console.log(token);
+  let points = await Point.find()
     .then((result) => result)
     .catch((e) => res.status(400).send(e));
+  if (token) {
+    try {
+      user = jwt.verify(token.split(" ")[1], process.env.SECRET)
+      const eventosCurtidos = await UserNeo4j.eventosCurtidos(user.user._id)
+      points = points.map((point) => {
+        if(eventosCurtidos.find((userPoint) => userPoint == `${point._id}`)){
+          point._doc.curtiu = true;
+        }
+        return point
+      })
+    } catch (e) {
+      
+    }
+  }
+  console.log(points);
   res.status(200).send(points);
 };
 
