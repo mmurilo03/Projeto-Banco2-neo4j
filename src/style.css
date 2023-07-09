@@ -271,8 +271,7 @@ body {
 .showButton {
   display: flex;
   justify-content: flex-end;
-  padding-right: 1rem;
-  padding-bottom: 1rem;
+
 }
 
 .card-title,
@@ -577,6 +576,25 @@ body {
   display: none;
 }
 
+.show-and-like{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+  padding-right: 1rem;
+  padding-bottom: 1rem;
+}
+
+#likeButton{
+  all: unset;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+#likeButton:hover{
+  transition: 0.3s;
+  color: #f3a9a9
+}
 
 
 
