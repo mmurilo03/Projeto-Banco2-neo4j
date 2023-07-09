@@ -1,30 +1,12 @@
 const Point = require("../models/Point");
-const UserNeo4j = require("../models/UserNeo4j")
+const UserNeo4j = require("../models/UserNeo4j");
 const PointNeo4j = require("../models/PointNeo4j");
 const jwt = require("jsonwebtoken");
 
 const listarPontos = async (req, res) => {
-  let user;
-  const token = req.get("authorization");
-  console.log(token);
   let points = await Point.find()
     .then((result) => result)
     .catch((e) => res.status(400).send(e));
-  if (token) {
-    try {
-      user = jwt.verify(token.split(" ")[1], process.env.SECRET)
-      const eventosCurtidos = await UserNeo4j.eventosCurtidos(user.user._id)
-      points = points.map((point) => {
-        if(eventosCurtidos.find((userPoint) => userPoint == `${point._id}`)){
-          point._doc.curtiu = true;
-        }
-        return point
-      })
-    } catch (e) {
-      
-    }
-  }
-  console.log(points);
   res.status(200).send(points);
 };
 
@@ -100,11 +82,24 @@ const pesquisaPorTexto = async (req, res) => {
 };
 
 const pesquisaPorId = async (req, res) => {
-  await Point.findById(req.params.id)
-    .then((result) => {
-      res.status(200).send(result);
-    })
+  let user;
+  const token = req.get("authorization");
+
+  const point = await Point.findById(req.params.id)
+    .then((result) => result)
     .catch((e) => res.status(404).send("Ponto não encontrado"));
+
+  if (token) {
+    try {
+      user = jwt.verify(token.split(" ")[1], process.env.SECRET);
+      const eventosCurtidos = await UserNeo4j.eventosCurtidos(user.user._id);
+      if (eventosCurtidos.find((userPoint) => userPoint == `${point._id}`)) {
+        point._doc.curtiu = true;
+      }
+    } catch (e) {}
+  }
+  res.status(200).send(point);
+  return;
 };
 
 module.exports = {

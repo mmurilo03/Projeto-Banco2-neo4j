@@ -50,7 +50,7 @@ const login = async (req, res) => {
             expiresIn: 86400,
           });
           const admin = email == process.env.ADMIN;
-          res.send({ token: `Bearer ${token}`, admin: admin });
+          res.send({ token: `Bearer ${token}`, admin: admin, id: user._id.toHexString() });
           return;
         }
         res.send({ error: "Senha errada" });

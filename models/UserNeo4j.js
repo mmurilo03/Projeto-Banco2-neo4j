@@ -62,7 +62,6 @@ async function eventosCurtidos(userId) {
         if(result.records.length > 0){
             return result.records[0]._fields
         } else {
-            console.log("Sem eventos");
             return [];
         }
     });
