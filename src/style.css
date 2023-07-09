@@ -5,12 +5,12 @@
 }
 
 ::-webkit-scrollbar {
-  width: 0.5vw;
+  width: 0.5rem;
 }
 
 ::-webkit-scrollbar-thumb {
   background-color: #3582c5;
-  border-radius: 1vw;
+  border-radius: 1rem;
 }
 
 button {
@@ -23,9 +23,9 @@ button {
   font-weight: 400;
   line-height: 1.5;
   text-align: center;
-  border: 0.1vw solid transparent;
-  padding: 0.2vw 0.4vw;
-  font-size: 1vw;
+  border: 0.1rem solid transparent;
+  padding: 0.2rem 0.4rem;
+  font-size: 1rem;
   border-radius: .25rem;
   transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
@@ -41,30 +41,30 @@ button:hover {
 .title-header {
   position: absolute;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   width: 100%;
-  pointer-events: none;
   color: #011F39;
   font-weight: bold;
 }
 
 .title-header p {
-  font-size: 1.5vw;
+  pointer-events: none;
+  font-size: 1.5rem;
 }
 
 .title {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1vw;
-  margin-top: 1vw;
+  gap: 1rem;
+  margin-top: 1rem;
   text-align: center;
   background-color: #fff;
-  width: 25vw;
-  height: 2vw;
-  border-radius: 0.3vw;
-  font-size: 1vw;
+  width: 25rem;
+  height: 2rem;
+  border-radius: 0.3rem;
+  font-size: 1rem;
 }
 
 /*mapa*/
@@ -98,18 +98,17 @@ body {
 .menu-bar {
   display: flex;
   justify-content: center;
-  width: 4vw;
-  height: 4vw;
-  max-height: 10vw;
-  max-width: 10vw;
-  position: absolute;
-  margin-top: 1vw;
-  margin-left: 1vw;
+  width: 3.5rem;
+  height: 3.5rem;
+  max-height: 7rem;
+  max-width: 7rem;
+  margin-top: 1rem;
+  margin-left: 1rem;
   background-color: #fff;
   -webkit-box-shadow: 2px 4px 24px -7px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: 2px 4px 24px -7px rgba(0, 0, 0, 0.75);
   box-shadow: 2px 4px 24px -7px rgba(0, 0, 0, 0.75);
-  border-radius: 0.2vw;
+  border-radius: 0.2rem;
 }
 
 .menu-bar.hide {
@@ -128,7 +127,7 @@ body {
 }
 
 #menuBarButton{
-  font-size: 3vw;
+  font-size: 3rem;
 }
 
 /*lista*/
@@ -154,8 +153,8 @@ body {
 }
 
 #exitList {
-  height: 1vw;
-  width: 1vw;
+  height: 1rem;
+  width: 1rem;
 }
 
 .search {
@@ -163,40 +162,40 @@ body {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  padding-top: 1vw;
-  padding-left: 0.1vw;
+  padding-top: 1rem;
+  padding-left: 0.1rem;
   width: 100%;
 }
 
 .date-search {
   width: 100%;
-  padding-top: 1vw;
+  padding-top: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  gap: 1.5vw;
+  gap: 1.5rem;
 }
 
 .date-search label {
-  font-size: 1vw;
+  font-size: 1rem;
 }
 
 .exit {
   display: flex;
   justify-content: flex-end;
-  padding-top: 1.5vw;
+  padding-top: 1.5rem;
 }
 
 
 #searchEvent {
-  padding-left: 2vw;
-  width: 20vw;
-  height: 2vw;
+  padding-left: 2rem;
+  width: 20rem;
+  height: 2rem;
   background-image: url(./img/search-icon.svg);
-  background-size: 1vw 1vw;
+  background-size: 1rem 1rem;
   background-repeat: no-repeat;
-  background-position: 0.4vw 0.3vw;
+  background-position: 0.4rem 0.3rem;
 }
 
 .date-ini,
@@ -208,34 +207,34 @@ body {
 /*Card*/
 
 .cards{
-  margin-top: 1vw;
+  margin-top: 1rem;
   overflow: auto;
   height: 80vh;
   cursor: default;
 }
 
 .card {
-  margin-top: 1vw;
-  margin-left: 0.5vw;
-  margin-right: 0.5vw;
+  margin-top: 1rem;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
   background-color: #011F39;
   color: white;
   display: flex;
   flex-direction: column;
-  border-radius: 0.3vw;
-  gap: 1vw;
+  border-radius: 0.3rem;
+  gap: 1rem;
   -webkit-box-shadow: -1px 12px 34px -28px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: -1px 12px 34px -28px rgba(0, 0, 0, 0.75);
   box-shadow: -1px 12px 34px -28px rgba(0, 0, 0, 0.75);
 }
 
 .card-header {
-  font-size: 1.2vw;
-  border-radius: 0.3vw;
-  padding-top: 1vw;
-  padding-left: 1vw;
+  font-size: 1.2rem;
+  border-radius: 0.3rem;
+  padding-top: 1rem;
+  padding-left: 1rem;
   background-color: #043057;
-  padding-bottom: 0.5vw;
+  padding-bottom: 0.5rem;
   display: flex;
   justify-content: space-between;
 }
@@ -246,34 +245,34 @@ body {
 }
 
 .card-actions img{
-  width: 1vw;
+  width: 1rem;
 }
 
 .card-actions{
   display: flex;
-  gap: 0.5vw;
-  margin-right: 1.5vw;
+  gap: 0.5rem;
+  margin-right: 1.5rem;
 }
 
 
 .desc {
-  font-size: 0.9vw;
-  padding-left: 0.5vw;
-  padding-right: 0.5vw;
+  font-size: 0.9rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 
 
 }
 
 .dates {
-  font-size: 0.9vw;
-  padding-left: 0.5vw;
+  font-size: 0.9rem;
+  padding-left: 0.5rem;
 }
 
 .showButton {
   display: flex;
   justify-content: flex-end;
-  padding-right: 1vw;
-  padding-bottom: 1vw;
+  padding-right: 1rem;
+  padding-bottom: 1rem;
 }
 
 .card-title,
@@ -286,9 +285,9 @@ body {
 
 .form-register {
   height: 60vh;
-  width: 25vw;
-  margin-top: 7vw;
-  right: 6vw;
+  width: 25rem;
+  margin-top: 7rem;
+  right: 6rem;
   position: absolute;
   margin-right: 10px;
   background-color: white;
@@ -305,81 +304,81 @@ body {
 
 #exitForm{
   all: unset;
-  margin-top: 0.5vw;
-  padding-right: 0.5vw;
+  margin-top: 0.5rem;
+  padding-right: 0.5rem;
 }
 
 #exitFormIcon{
-  width: 1vw;
+  width: 1rem;
   padding-right: 90%;
 }
 
 .title-form{
   text-align: center;
-  padding-top: 1vw;
-  font-size: 1.3vw;
+  padding-top: 1rem;
+  font-size: 1.3rem;
   pointer-events: none;
 }
 
 .title-form h2{
-  font-size: 1vw;
+  font-size: 1rem;
   opacity: 60%;
   font-weight: lighter;
 }
 
 .infos-event{
-  padding-top: 1vw;
-  padding-left: 1vw;
+  padding-top: 1rem;
+  padding-left: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 1vw;
+  gap: 1rem;
 }
 
 .title-event input{
-  width: 22vw;
-  height: 1.5vw;
+  width: 22rem;
+  height: 1.5rem;
 }
 
 .desc-event textarea{
-  width: 22vw;
-  height: 6vw;
+  width: 22rem;
+  height: 6rem;
 }
 
 .date-form{
-  font-size: 1vw;
+  font-size: 1rem;
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 2vw;
+  gap: 2rem;
   width: 100%;
 }
 
 .date-ini-form{
-  width: 10vw;
+  width: 10rem;
 }
 
 .date-end-form{
-  width: 10vw;
+  width: 10rem;
 }
 
 .date-ini-form input,
 .date-end-form input{
-  width: 10vw;
+  width: 10rem;
 }
 
 .button-event-form{
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-top: 2.5vw;
+  padding-top: 2.5rem;
 }
 
 .button-event,
 .button-change{
   background-color: #011F39;
   color: white;
-  width: 15vw;
-  height: 2.5vw;
+  width: 15rem;
+  height: 2.5rem;
 }
 
 .button-event:hover,
@@ -435,7 +434,7 @@ body {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  width: 40vw;
+  width: 40rem;
   height: 28vh;
   background-color: #fff;
   pointer-events: none;
@@ -453,15 +452,15 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 2vw;
+  gap: 2rem;
   pointer-events: all;
-  padding-top: 1vw;
+  padding-top: 1rem;
 }
 
 .decision-delete button{
   background-color: #011F39;
   color: white;
-  width: 5vw;
+  width: 5rem;
   height: 6vh;
   pointer-events: all;
 }
@@ -490,4 +489,96 @@ body {
 #yesDelete{
   background-color: #379237;
 }
+
+/*Form login*/
+
+.form-login{
+  height: 30rem;
+  width: 20rem;
+  margin-top: 7rem;
+  right: 6rem;
+  position: absolute;
+  margin-right: 10px;
+  background-color: white;
+  -webkit-box-shadow: 4px 2px 25px -1px rgba(0, 0, 0, 0.52);
+  -moz-box-shadow: 4px 2px 25px -1px rgba(0, 0, 0, 0.52);
+  box-shadow: 4px 2px 25px -1px rgba(0, 0, 0, 0.52);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6rem
+}
+
+.form-login.hide{
+  height: 0%;
+  width: 0%;
+  pointer-events: none;
+  display: none;
+}
+
+.login-button{
+  margin-right: 2rem;
+}
+
+.fields-login{
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.fields-login input{
+  width: 12rem;
+  height: 1.5rem;
+}
+
+.buttons-login{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.buttons-login button{
+  color: #fff;
+}
+
+#formLoginButton:hover,
+#formCreateButton:hover  {
+  background-color: rgb(7, 54, 95);
+}
+
+.title-login{
+  font-weight: bold;
+  font-size: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.exit-login{
+  display: flex;
+  justify-content: flex-end;
+  width: 120%;
+}
+
+#formLoginButton{
+  background-color: #011F39;
+  width: 10rem;
+}
+
+#formCreateButton{
+  background-color: #183f61;
+}
+
+.loginButton.hide,
+.logoutButton.hide{
+  height: 0%;
+  width: 0%;
+  pointer-events: none;
+  display: none;
+}
+
+
+
+
+
 

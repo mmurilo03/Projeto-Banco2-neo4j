@@ -7,12 +7,21 @@ let mapPinShowEvent;
 let mapPinFocusEvent;
 let showList = false;
 let pesq;
+let token = {};
 
 /*Elements*/
 let form = document.querySelector(".form-register");
 let listEvents = document.querySelector(".event-list");
 let divButtonForm = document.querySelector(".button-event-form");
 let confirmDelete = document.querySelector(".confirm-delete");
+let loginButton = document.querySelector(".loginButton");
+let logoutButton = document.querySelector(".logoutButton");
+let closeLoginForm = document.querySelector('#exitFormLogin')
+let formLoginButton = document.querySelector("#formLoginButton");
+let formCreateButton = document.querySelector("#formCreateButton");
+let formLogin = document.querySelector("#formLogin");
+let formEmail = document.querySelector("#email");
+let formSenha = document.querySelector("#senha");
 
 /*Elements form */
 let titleForm = document.querySelector("#titleForm");
@@ -34,22 +43,22 @@ async function initMap() {
     disableDefaultUI: true,
   });
 
-  
-
   map.addListener("click", (event) => {
-    if (document.querySelector(".button-change")) {
-      divButtonForm.removeChild(document.querySelector(".button-change"));
-      inputEvent.value = "";
-      descricao.value = "";
-      dataInicio.value = "";
-      dataTermino.value = "";
+    if (token.admin) {
+      if (document.querySelector(".button-change")) {
+        divButtonForm.removeChild(document.querySelector(".button-change"));
+        inputEvent.value = "";
+        descricao.value = "";
+        dataInicio.value = "";
+        dataTermino.value = "";
+      }
+      buttonSave.classList.remove("hide");
+      isClicked = true;
+      showForm();
+      coordinates.textContent = `${event.latLng.lat()}, ${event.latLng.lng()}`;
+      marker.position = { lat: event.latLng.lat(), lng: event.latLng.lng() };
+      marker.setPosition(event.latLng);
     }
-    buttonSave.classList.remove("hide");
-    isClicked = true;
-    showForm();
-    coordinates.textContent = `${event.latLng.lat()}, ${event.latLng.lng()}`;
-    marker.position = { lat: event.latLng.lat(), lng: event.latLng.lng() };
-    marker.setPosition(event.latLng);
   });
 
   mapPin = {
@@ -84,7 +93,7 @@ buttonSave.addEventListener("click", async () => {
     if (isClicked && showList) {
       await salvar();
       removeCardEvents();
-      removeMarker()
+      removeMarker();
       await mostrar();
     }
   }
@@ -96,7 +105,7 @@ searchEvent.addEventListener("keyup", async () => {
   let eventos;
   if (searchEvent.value == "") {
     removeCardEvents();
-    removeMarker()
+    removeMarker();
     await mostrar();
   } else {
     pesq = setTimeout(async () => {
@@ -106,6 +115,7 @@ searchEvent.addEventListener("keyup", async () => {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
+          authorization: token.token,
         },
         body: JSON.stringify(obj),
       });
@@ -138,11 +148,12 @@ async function salvar() {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      authorization: token.token,
     },
     body: JSON.stringify(obj),
   })
     .then((response) => {
-      exitFormSave()
+      exitFormSave();
       inputEvent.value = "";
       descricao.value = "";
       dataInicio.value = "";
@@ -160,6 +171,7 @@ async function editar(element) {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      authorization: token.token,
     },
   });
   const object = await response.json();
@@ -177,6 +189,7 @@ async function editar(element) {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      authorization: token.token,
     },
     body: JSON.stringify(obj),
   })
@@ -194,10 +207,9 @@ async function destroy(element) {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      authorization: token.token,
     },
-  }).then(
-    hideFormEdit()
-  );
+  }).then(hideFormEdit());
 }
 
 /*Mostrar lista*/
@@ -208,6 +220,7 @@ async function mostrar() {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      authorization: token.token,
     },
   });
   const eventos = await response.json();
@@ -254,8 +267,8 @@ buttonExitList.addEventListener("click", () => {
   showList = false;
   listEvents.classList.add("hide");
   removeCardEvents();
-  removeMarker()
-})
+  removeMarker();
+});
 
 function removeCardEvents() {
   while (document.querySelector(".card")) {
@@ -265,7 +278,7 @@ function removeCardEvents() {
   }
 }
 
-function removeMarker(){
+function removeMarker() {
   for (let markerSalvo of markers) {
     markerSalvo.setMap(null);
   }
@@ -279,9 +292,9 @@ function showForm() {
 }
 
 let exitForm = document.querySelector("#exitForm");
-exitForm.addEventListener("click", exitFormSave)
+exitForm.addEventListener("click", exitFormSave);
 
-function exitFormSave(){
+function exitFormSave() {
   form.classList.add("hide");
 }
 
@@ -291,6 +304,7 @@ async function showFormEdit(element) {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      authorization: token.token,
     },
   });
   const object = await response.json();
@@ -324,6 +338,7 @@ async function createCard(element) {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      authorization: token.token,
     },
   });
   const object = await response.json();
@@ -349,29 +364,31 @@ async function createCard(element) {
   let buttonEdit = document.createElement("button");
   buttonEdit.setAttribute("id", "editButton");
   let iconEdit = document.createElement("i");
-  iconEdit.classList.add("fa-solid")
-  iconEdit.classList.add("fa-pen")
+  iconEdit.classList.add("fa-solid");
+  iconEdit.classList.add("fa-pen");
   buttonEdit.appendChild(iconEdit);
   cardActions.appendChild(buttonEdit);
 
   buttonEdit.addEventListener("click", async () => {
-    await showFormEdit(element);
-    let buttonChange = document.createElement("button");
-    buttonChange.textContent = "Salvar alterações";
-    buttonChange.classList.add("button-change");
-    buttonSave.classList.add("hide");
-    if (document.querySelector(".button-change")) {
-      divButtonForm.removeChild(document.querySelector(".button-change"));
+    if (token.admin) {
+      await showFormEdit(element);
+      let buttonChange = document.createElement("button");
+      buttonChange.textContent = "Salvar alterações";
+      buttonChange.classList.add("button-change");
+      buttonSave.classList.add("hide");
+      if (document.querySelector(".button-change")) {
+        divButtonForm.removeChild(document.querySelector(".button-change"));
+      }
+      divButtonForm.appendChild(buttonChange);
+      buttonChange.addEventListener("click", async () => {
+        console.log("Editar");
+        await editar(element);
+        removeCardEvents();
+        removeMarker();
+        await mostrar();
+        hideFormEdit();
+      });
     }
-    divButtonForm.appendChild(buttonChange);
-    buttonChange.addEventListener("click", async () => {
-      console.log("Editar");
-      await editar(element);
-      removeCardEvents();
-      removeMarker()
-      await mostrar();
-      hideFormEdit();
-    });
   });
 
   let buttonDelete = document.createElement("button");
@@ -382,52 +399,52 @@ async function createCard(element) {
   buttonDelete.appendChild(iconDelete);
   cardActions.appendChild(buttonDelete);
 
-  let divOcult = document.querySelector('.exit-delete')
-  let decisionDelete = document.querySelector('.decision-delete')
-  
+  let divOcult = document.querySelector(".exit-delete");
+  let decisionDelete = document.querySelector(".decision-delete");
+
   buttonDelete.addEventListener("click", async () => {
-    if(document.querySelector('#exit-delete')){
-      divOcult.removeChild(document.querySelector("#exit-delete"))
-      decisionDelete.removeChild(document.querySelector("#yesDelete"))
-      decisionDelete.removeChild(document.querySelector("#noDelete"))
+    if (token.admin) {
+      if (document.querySelector("#exit-delete")) {
+        divOcult.removeChild(document.querySelector("#exit-delete"));
+        decisionDelete.removeChild(document.querySelector("#yesDelete"));
+        decisionDelete.removeChild(document.querySelector("#noDelete"));
+      }
+
+      confirmDelete.classList.remove("hide");
+      let ocultDelete = document.createElement("button");
+      ocultDelete.setAttribute("id", "exit-delete");
+      let ocultDeleteIcon = document.createElement("o");
+      ocultDeleteIcon.classList.add("fas");
+      ocultDeleteIcon.classList.add("fa-times");
+      ocultDelete.appendChild(ocultDeleteIcon);
+      divOcult.appendChild(ocultDelete);
+
+      let yesDelete = document.createElement("button");
+      yesDelete.setAttribute("id", "yesDelete");
+      yesDelete.textContent = "Sim";
+      let noDelete = document.createElement("button");
+      noDelete.setAttribute("id", "noDelete");
+      noDelete.textContent = "Não";
+
+      decisionDelete.appendChild(yesDelete);
+      decisionDelete.appendChild(noDelete);
+
+      ocultDelete.addEventListener("click", () => {
+        confirmDelete.classList.add("hide");
+      });
+
+      yesDelete.addEventListener("click", async () => {
+        await destroy(element);
+        removeCardEvents();
+        removeMarker();
+        await mostrar();
+        confirmDelete.classList.add("hide");
+      });
+
+      noDelete.addEventListener("click", () => {
+        confirmDelete.classList.add("hide");
+      });
     }
-
-
-    confirmDelete.classList.remove('hide')
-    let ocultDelete = document.createElement("button")
-    ocultDelete.setAttribute("id", "exit-delete")
-    let ocultDeleteIcon = document.createElement("o")
-    ocultDeleteIcon.classList.add("fas")
-    ocultDeleteIcon.classList.add("fa-times")
-    ocultDelete.appendChild(ocultDeleteIcon)
-    divOcult.appendChild(ocultDelete)
-
-    let yesDelete = document.createElement("button")
-    yesDelete.setAttribute("id", "yesDelete")
-    yesDelete.textContent = "Sim"
-    let noDelete = document.createElement("button")
-    noDelete.setAttribute("id", "noDelete")
-    noDelete.textContent = "Não"
-
-    decisionDelete.appendChild(yesDelete)
-    decisionDelete.appendChild(noDelete)
-
-    ocultDelete.addEventListener('click', () => {
-      confirmDelete.classList.add('hide')
-    })
-
-    yesDelete.addEventListener('click', async () => {
-    await destroy(element);
-    removeCardEvents();
-    removeMarker()
-    await mostrar();
-    confirmDelete.classList.add('hide')
-    })
-
-    noDelete.addEventListener('click', () => {
-      confirmDelete.classList.add('hide')
-
-    })
   });
 
   let desc = document.createElement("div");
@@ -539,3 +556,50 @@ function errorButton() {
   buttonSave.style.cursor = "not-allowed";
   buttonSave.disabled = true;
 }
+
+//Login
+loginButton.addEventListener("click", () => {
+  if (formLogin.className.includes("hide")) {
+    formLogin.classList.remove("hide");
+  }
+});
+
+closeLoginForm.addEventListener("click", () => {
+  formLogin.classList.add("hide");
+})
+
+formLoginButton.addEventListener("click", async () => {
+  const obj = { email: formEmail.value, password: formSenha.value };
+  const response = await fetch(`http://localhost:3000/user/login`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(obj),
+  });
+  token = await response.json();
+  console.log(token);
+  if(token.token){
+    loginButton.classList.add('hide')
+    logoutButton.classList.remove('hide')
+  }
+});
+
+formCreateButton.addEventListener("click", async () => {
+  const obj = { email: formEmail.value, password: formSenha.value };
+  const response = await fetch(`http://localhost:3000/user`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(obj),
+  });
+})
+
+logoutButton.addEventListener("click", () => {
+  loginButton.classList.remove('hide')
+  logoutButton.classList.add('hide')
+  token = {}
+})
