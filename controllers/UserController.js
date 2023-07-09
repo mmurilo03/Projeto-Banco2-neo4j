@@ -1,10 +1,15 @@
 const User = require("../models/User");
+const UserNeo4j = require("../models/UserNeo4j");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const criarUsuario = async (req, res) => {
   const email = req.body.email
   const password = req.body.password
+  if (await User.findOne({ email: email})){
+    res.send({error: "Email cadastrado"});
+    return;
+  }
   if (email && password){
     try {
       const hashSenha = await bcrypt.hash(password, Number(process.env.SALT));
@@ -15,6 +20,7 @@ const criarUsuario = async (req, res) => {
       const user = await User.create(obj)
         .then((result) => result)
         .catch((e) => res.status(400).send(e));
+      const userNeo4j = await UserNeo4j.salvar({ email: email, mongoId: user._id.toHexString()})
       if (user) {
         res.status(201).send(user);
         return;
