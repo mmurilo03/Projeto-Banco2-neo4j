@@ -1,0 +1,143 @@
+<html>
+
+<head>
+  <title>Simple Map</title>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+  <link rel="stylesheet" type="text/css" href="./style.css" />
+  <script type="module" src="index.js"></script>
+  <script src="https://kit.fontawesome.com/8becc52120.js" crossorigin="anonymous"></script>
+<body>
+  <section class="map">
+    <div class="container">
+
+      <div class="content">
+
+        <!-- prettier-ignore -->
+        <div id="map">
+        </div>
+        <script>(g => { var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document, b = window; b = b[c] || (b[c] = {}); var d = b.maps || (b.maps = {}), r = new Set, e = new URLSearchParams, u = () => h || (h = new Promise(async (f, n) => { await (a = m.createElement("script")); e.set("libraries", [...r] + ""); for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]); e.set("callback", c + ".maps." + q); a.src = `https://maps.${c}apis.com/maps/api/js?` + e; d[q] = f; a.onerror = () => h = n(Error(p + " could not load.")); a.nonce = m.querySelector("script[nonce]")?.nonce || ""; m.head.append(a) })); d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)) })
+            ({ key: "", v: "weekly" });
+        </script>
+        <div class="title-header">
+          <div class="title">
+            <p>
+              <i class="fa-solid fa-map"></i>
+            </p>
+            <h1> MARCADOR DE EVENTOS </h1>
+            
+          </div>
+        </div>
+
+        
+        <div class="menu-bar">
+          <button id="menuBarButton">
+            <i class="fas fa-bars"></i>
+          </button>
+        </div>
+        
+
+        <div class="form-register hide">
+          <div class="exit-form">
+          <button id="exitForm">
+            <i class="fas fa-times"></i>
+          </button>
+          </div>
+          <div class="title-form">
+            <h1 id="titleForm"><b>Registrar</b></h1>
+            <h2 id="coordinates">389218312, -21381283</h2>
+          </div>
+          <div class="infos-event">
+            <div class="title-event">
+              <label for="titleEvent">Nome do evento</label>
+            </br>
+              <input type="text" id="titulo">
+            </div>
+            <div class="desc-event">
+              <label for="descEvent">Descrição do evento</label>
+            </br>
+            <textarea id="descricao"name="descEvent" cols="30" rows="12"></textarea>
+            </div>
+
+            <div class="date-form">
+              <div class="date-ini-form">
+                <label for="dataIni">Data Início</label>
+                <input id="dataIni" type="date" name="dataIni">
+              </div>
+              <div class="date-end-form">
+                <label for="dataFim"> Data Termino</label>
+                <input id="dataFim" type="date" name="dataFim">
+              </div>
+            </div>
+
+          </div>
+          <div class="button-event-form">
+            <button class="button-event">Salvar evento</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="event-list hide">
+        <div class="exit">
+          <button id="exitListButton">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="search">
+          <div class="input-search">
+            <input class="text" id="searchEvent" name="searchEvent" placeholder="Digite o nome do evento">
+          </div>
+        </div>
+        <div class="cards">
+          <!-- <div class="card">
+            <div class="card-header">
+              <div class="card-title">Passear com o cachorro
+                
+              </div>
+              <div class="card-actions">
+                <button id="editButton"><i class="fas fa-trash"></i></button>
+                <button id="deleteButton"><i class="fas fa-pencil"></i></button>
+              </div>
+            </div>
+            <div class="desc">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laudantium libero laboriosam
+              perspiciatis dolorem sunt suscipit accusamus dignissimos illum similique tempora vitae assumenda eos quaerat
+              quo quae, odit rerum labore voluptatibus?</div>
+            <div class="dates">
+              <b>
+                Data Inicio:
+              </b>
+               06/08/2023
+               <b>
+                Data Fim: 
+               </b>
+              06/08/2023
+            </div>
+            <div class="showButton">
+              <button id="showButton">Mostrar</button>
+            </div>
+          </div> -->
+        </div>
+        
+      </div>
+
+      <div class="confirm-delete hide">
+        <div class="delete-confirmation">
+          <div class="exit-delete">
+            </div>
+
+          <div class="title-delete">
+            <h2>Deseja deletar o evento?</h2>
+          </div>
+          
+          <div class="decision-delete">
+            <!-- <button id="yesDelete">Sim</button>
+            <button id="noDelete">Não</button> -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+   
+  </section>
+</body>
+
+</html>
