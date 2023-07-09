@@ -3,14 +3,12 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const criarUsuario = async (req, res) => {
-  const username = req.body.username
   const email = req.body.email
   const password = req.body.password
-  if (username && email && password){
+  if (email && password){
     try {
       const hashSenha = await bcrypt.hash(password, Number(process.env.SALT));
       const obj = {
-        username: username,
         email: email,
         password: hashSenha
       };
@@ -19,47 +17,41 @@ const criarUsuario = async (req, res) => {
         .catch((e) => res.status(400).send(e));
       if (user) {
         res.status(201).send(user);
+        return;
       }
     } catch (e){
       console.log(e);
     }
   }
   res.send({error:"Campos inválidos"})
+  return;
 };
 
 const login = async (req, res) => {
   const email = req.body.email
   const password = req.body.password
   if (email && password){
-    const user = await User.findOne({ email: email}).then((result) => result)
+    const user = await User.findOne({ email: email}).then((result) => result).catch((e) => console.log("erro"))
     if(user){
       try{
         if (await bcrypt.compare(password, user.password)){
           const token = jwt.sign({ user: user }, process.env.SECRET, { expiresIn: 86400 });
-          req.session.user = user;
-          res.set("auth", `Bearer ${token}`);
-          res.cookie("token", `Bearer ${token}`);
-          res.send({token:`Bearer ${token}`});
+          const admin = email == process.env.ADMIN
+          res.send({token:`Bearer ${token}`, admin: admin});
           return;
         }
         res.send({error:"Senha errada"})
         return;
       } catch (e){
-        console.log(e);
+        console.log("erro");
       }
     }
   }
   res.send({error:"Campos inválidos"})
+  return;
 }
-
-const logout = (req, res) => {
-  req.session.destroy();
-  res.clearCookie("token");
-  res.send({ok:"ok"})
-};
 
 module.exports = {
   criarUsuario,
   login,
-  logout
 };
