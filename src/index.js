@@ -16,12 +16,14 @@ let divButtonForm = document.querySelector(".button-event-form");
 let confirmDelete = document.querySelector(".confirm-delete");
 let loginButton = document.querySelector(".loginButton");
 let logoutButton = document.querySelector(".logoutButton");
-let closeLoginForm = document.querySelector('#exitFormLogin')
+let closeLoginForm = document.querySelector("#exitFormLogin");
 let formLoginButton = document.querySelector("#formLoginButton");
 let formCreateButton = document.querySelector("#formCreateButton");
 let formLogin = document.querySelector("#formLogin");
 let formEmail = document.querySelector("#email");
 let formSenha = document.querySelector("#senha");
+let eventButton = document.querySelector("#buttonEventList");
+let recommendationButton = document.querySelector("#buttonRecommendationList");
 
 /*Elements form */
 let titleForm = document.querySelector("#titleForm");
@@ -100,7 +102,6 @@ buttonSave.addEventListener("click", async () => {
 });
 
 searchEvent.addEventListener("keyup", async () => {
-  console.log(searchEvent.value);
   clearTimeout(pesq);
   let eventos;
   if (searchEvent.value == "") {
@@ -120,7 +121,6 @@ searchEvent.addEventListener("keyup", async () => {
         body: JSON.stringify(obj),
       });
       eventos = await response.json();
-      console.log(eventos);
       removeCardEvents();
       for (let evento of eventos) {
         createCard(evento._id);
@@ -163,6 +163,20 @@ async function salvar() {
       errorButton();
     });
   isClicked = false;
+}
+
+async function curtir(element) {
+  const response = await fetch(
+    `http://localhost:3000/user/curtir/${element}/${token.id}`,
+    {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        authorization: token.token,
+      },
+    }
+  );
 }
 
 async function editar(element) {
@@ -381,7 +395,6 @@ async function createCard(element) {
       }
       divButtonForm.appendChild(buttonChange);
       buttonChange.addEventListener("click", async () => {
-        console.log("Editar");
         await editar(element);
         removeCardEvents();
         removeMarker();
@@ -466,13 +479,40 @@ async function createCard(element) {
   )}/${object.dataTermino.substr(0, 4)}`;
   card.appendChild(datasDiv);
 
+  let showAndLike = document.createElement("div");
+  showAndLike.classList.add("show-and-like");
+  card.appendChild(showAndLike);
+
   let divButton = document.createElement("div");
   divButton.classList.add("showButton");
   let showButton = document.createElement("button");
   showButton.setAttribute("id", "showButton");
   showButton.textContent = "Mostrar";
   divButton.appendChild(showButton);
-  card.appendChild(divButton);
+  showAndLike.appendChild(divButton);
+
+  let likeDiv = document.createElement("div");
+  likeDiv.classList.add("like-button");
+  showAndLike.appendChild(likeDiv);
+
+  let likeButton = document.createElement("button");
+  likeButton.setAttribute("id", "likeButton");
+  let iconButton = document.createElement("i");
+  iconButton.classList.add("fa-solid");
+  iconButton.classList.add("fa-heart");
+  likeButton.appendChild(iconButton);
+  likeDiv.appendChild(likeButton);
+
+  if (object.curtiu) {
+    iconButton.style.color = "#53a653";
+  }
+
+  likeButton.addEventListener("click", async () => {
+    await curtir(element);
+    removeCardEvents();
+    removeMarker();
+    await mostrar();
+  });
 
   showButton.addEventListener("click", () => {
     let marker = markers.find((m) => m.id === element);
@@ -566,7 +606,7 @@ loginButton.addEventListener("click", () => {
 
 closeLoginForm.addEventListener("click", () => {
   formLogin.classList.add("hide");
-})
+});
 
 formLoginButton.addEventListener("click", async () => {
   const obj = { email: formEmail.value, password: formSenha.value };
@@ -579,10 +619,20 @@ formLoginButton.addEventListener("click", async () => {
     body: JSON.stringify(obj),
   });
   token = await response.json();
-  console.log(token);
-  if(token.token){
-    loginButton.classList.add('hide')
-    logoutButton.classList.remove('hide')
+  if (token.token) {
+    loginButton.classList.add("hide");
+    logoutButton.classList.remove("hide");
+    formLogin.classList.add("hide");
+  }
+  if (token.error) {
+    formLoginButton.textContent = token.error;
+    formLoginButton.style.background = "#ff3333";
+    setTimeout(() => {
+      formLoginButton.textContent = "Entrar";
+      formLoginButton.style.background = "#011F39"; //blue
+    }, 2000);
+  } else {
+    formLoginButton.textContent = "Entrar";
   }
 });
 
@@ -596,10 +646,32 @@ formCreateButton.addEventListener("click", async () => {
     },
     body: JSON.stringify(obj),
   });
-})
+  const responseJson = await response.json();
+  if (responseJson.error) {
+    formCreateButton.textContent = responseJson.error;
+    formCreateButton.style.background = "#ff3333";
+    setTimeout(() => {
+      formCreateButton.textContent = "Cadastre-se!";
+      formCreateButton.style.background = "#183f61"; //blue
+    }, 2000);
+  } else {
+    formCreateButton.textContent = "Cadastre-se!";
+  }
+});
 
 logoutButton.addEventListener("click", () => {
-  loginButton.classList.remove('hide')
-  logoutButton.classList.add('hide')
-  token = {}
+  loginButton.classList.remove("hide");
+  logoutButton.classList.add("hide");
+  token = {};
+});
+
+eventButton.addEventListener("click", async () => {
+  removeCardEvents();
+  removeMarker();
+  await mostrar();
+});
+
+recommendationButton.addEventListener("click", async () => {
+  removeCardEvents();
+  removeMarker();
 })
