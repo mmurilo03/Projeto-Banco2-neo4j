@@ -64,8 +64,6 @@ async function eventosCurtidos(userId) {
         result.records.forEach((record) => {
           eventos.push(record._fields[0])
         })
-        console.log(eventos);
-
         return eventos;
       } else {
         return [];
@@ -81,7 +79,7 @@ async function recomendados(userId) {
   const session = driver().session();
   const curtiu = await session
     .run(
-      "MATCH (u1:User)-[c1:CURTIU]->(p1:Point)<-[c2:CURTIU]-(u2:User)-[c3:CURTIU]->(p2:Point) RETURN p2",
+      "MATCH (u1:User{mongoId:$mongoId})-[c1:CURTIU]->(p1:Point)<-[c2:CURTIU]-(u2:User)-[c3:CURTIU]->(p2:Point) where not (u1)-[:CURTIU]->(p2) RETURN p2",
       {
         mongoId: userId,
       }
@@ -90,10 +88,14 @@ async function recomendados(userId) {
       if (result.records.length > 0) {
         const eventos = []
         result.records.forEach((record) => {
-          eventos.push(record._fields[0].properties)
+          // if(eventos.some((evento) => evento.mongoId == record._fields[0].properties.mongoId)){ 
+          // }
+          let eventoJaAdicionado = eventos.some((evento) => evento.mongoId == record._fields[0].properties.mongoId)
+          if (!eventoJaAdicionado){
+            eventos.push(record._fields[0].properties)
+          }
         })
         console.log(eventos);
-
         return eventos;
       } else {
         return [];

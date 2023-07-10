@@ -5,7 +5,7 @@ const PointController = require("../controllers/PointController")
 const auth = require("../middleware/auth")
 
 router.get("/", PointController.listarPontos)
-router.get("/recomendados", auth.apiAuthUser,PointController.recomendados)
+router.get("/recomendados", PointController.recomendados)
 router.get("/:id", PointController.pesquisaPorId)
 router.post("/", auth.apiAuthAdmin, PointController.salvarPonto)
 router.delete("/:id", auth.apiAuthAdmin, PointController.deletarPonto)
