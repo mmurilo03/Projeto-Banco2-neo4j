@@ -268,6 +268,46 @@ async function mostrar() {
   }
 }
 
+async function mostrarRecomendacoes() {
+  const response = await fetch("http://localhost:3000/pontos/recomendados", {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      authorization: token.token,
+    },
+  });
+  const eventos = await response.json();
+
+  mapPinShowEvent = {
+    url: "./img/map-pin-show-event.svg", // url
+    scaledSize: new google.maps.Size(30, 40), // scaled size
+  };
+
+  mapPinFocusEvent = {
+    url: "./img/map-pin-focus-event.svg", // url
+    scaledSize: new google.maps.Size(30, 40), // scaled size
+  };
+
+  for (let i = eventos.length - 1; i >= 0; i--) {
+    let markerSalvo = new google.maps.Marker({
+      position: {
+        lat: Number(eventos[i].localizacao.split(" ")[1]),
+        lng: Number(eventos[i].localizacao.split(" ")[0]),
+      },
+      map,
+      titulo: eventos[i].titulo,
+      descricao: eventos[i].descricao,
+      dataInicio: eventos[i].dataInicio,
+      dataTermino: eventos[i].dataTermino,
+      id: eventos[i]._id,
+      icon: mapPinShowEvent,
+    });
+    createCard(eventos[i]._id);
+    markers.push(markerSalvo);
+  }
+}
+
 let showListButton = document.querySelector("#menuBarButton");
 
 showListButton.addEventListener("click", () => {
@@ -508,10 +548,12 @@ async function createCard(element) {
   }
 
   likeButton.addEventListener("click", async () => {
-    await curtir(element);
-    removeCardEvents();
-    removeMarker();
-    await mostrar();
+    if (token.token) {
+      await curtir(element);
+      removeCardEvents();
+      removeMarker();
+      await mostrar();
+    }
   });
 
   showButton.addEventListener("click", () => {
@@ -623,6 +665,9 @@ formLoginButton.addEventListener("click", async () => {
     loginButton.classList.add("hide");
     logoutButton.classList.remove("hide");
     formLogin.classList.add("hide");
+    listEvents.classList.add("hide");
+    removeCardEvents();
+    removeMarker();
   }
   if (token.error) {
     formLoginButton.textContent = token.error;
@@ -662,6 +707,9 @@ formCreateButton.addEventListener("click", async () => {
 logoutButton.addEventListener("click", () => {
   loginButton.classList.remove("hide");
   logoutButton.classList.add("hide");
+  listEvents.classList.add("hide");
+  removeCardEvents();
+  removeMarker();
   token = {};
 });
 
@@ -674,4 +722,9 @@ eventButton.addEventListener("click", async () => {
 recommendationButton.addEventListener("click", async () => {
   removeCardEvents();
   removeMarker();
-})
+  if (token.token) {
+    await mostrarRecomendacoes();
+  } else {
+    formLogin.classList.remove("hide");
+  }
+});

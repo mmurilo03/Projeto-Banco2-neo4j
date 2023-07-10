@@ -596,7 +596,25 @@ body {
   color: #f3a9a9
 }
 
+.buttons-lists{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2rem;
+  gap: 1rem;
+}
 
+#buttonRecommendationList,
+#buttonEventList{
+  color: #fff;
+  width: 9rem;
+}
 
+#buttonRecommendationList{
+  background-color: #53a653;
+}
 
+#buttonEventList{
+  background-color: #011F39;
+}
 
