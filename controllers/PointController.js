@@ -102,6 +102,25 @@ const pesquisaPorId = async (req, res) => {
   return;
 };
 
+const recomendados = async (req, res) => {
+  let user;
+  const token = req.get("authorization");
+  if (token) {
+    try {
+      user = jwt.verify(token.split(" ")[1], process.env.SECRET);
+      const eventosRecomendados = await UserNeo4j.recomendados(user.user._id);
+      const pontosRecomendados = []
+      for (let evento of eventosRecomendados){
+          let ponto = await Point.findById(evento.mongoId)
+          pontosRecomendados.push(ponto)
+      }
+      res.send(pontosRecomendados)
+      return;
+    } catch (e) {}
+  }
+  res.send({error: "Sem recomendações"});
+};
+
 module.exports = {
   listarPontos,
   salvarPonto,
@@ -109,4 +128,5 @@ module.exports = {
   atualizarPonto,
   pesquisaPorTexto,
   pesquisaPorId,
+  recomendados,
 };

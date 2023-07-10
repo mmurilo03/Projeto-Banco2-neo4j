@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-const apiAuth = async (req, res, next) => {
+const apiAuthAdmin = async (req, res, next) => {
   let user;
   const token = req.get("authorization");
   if (token) {
@@ -24,4 +24,4 @@ const apiAuth = async (req, res, next) => {
   res.status(401).json({ error: `Cabeçalho de token vazio ou token inválido` });
 };
 
-module.exports = { apiAuth };
+module.exports = { apiAuthAdmin };
