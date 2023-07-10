@@ -102,6 +102,24 @@ const pesquisaPorId = async (req, res) => {
   return;
 };
 
+const recomendados = async (req, res) => {
+  let user;
+  const token = req.get("authorization");
+  let points = await Point.find()
+    .then((result) => result)
+    .catch((e) => res.status(400).send(e));
+  if (token) {
+    try {
+      user = jwt.verify(token.split(" ")[1], process.env.SECRET);
+      const eventosCurtidos = await UserNeo4j.recomendados(user.user._id);
+      res.send(eventosCurtidos)
+      return;
+    } catch (e) {}
+  }
+  // console.log(points);
+  res.send({error: "Sem recomendações"});
+};
+
 module.exports = {
   listarPontos,
   salvarPonto,
@@ -109,4 +127,5 @@ module.exports = {
   atualizarPonto,
   pesquisaPorTexto,
   pesquisaPorId,
+  recomendados,
 };
