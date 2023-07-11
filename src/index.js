@@ -24,6 +24,7 @@ let formEmail = document.querySelector("#email");
 let formSenha = document.querySelector("#senha");
 let eventButton = document.querySelector("#buttonEventList");
 let recommendationButton = document.querySelector("#buttonRecommendationList");
+let usersLiked = document.querySelector("#usersLiked");
 
 /*Elements form */
 let titleForm = document.querySelector("#titleForm");
@@ -719,6 +720,7 @@ logoutButton.addEventListener("click", () => {
 });
 
 eventButton.addEventListener("click", async () => {
+  usersLiked.textContent = "";
   removeCardEvents();
   removeMarker();
   await mostrar();
@@ -727,7 +729,22 @@ eventButton.addEventListener("click", async () => {
 recommendationButton.addEventListener("click", async () => {
   removeCardEvents();
   removeMarker();
+  const response = await fetch(`http://localhost:3000/user/curtidos`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      authorization: token.token,
+    },
+  });
+  let eventos = await response.json();
+
   if (token.token) {
+    if (eventos.length == 0) {
+      usersLiked.textContent = `Sem recomendações pois o usuário não curtiu nenhum evento!`;
+    } else {
+      usersLiked.textContent = `Usuários que curtiram os eventos: ${eventos} também curtiram:`;
+    }
     await mostrarRecomendacoes();
   } else {
     formLogin.classList.remove("hide");
