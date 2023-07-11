@@ -135,7 +135,7 @@ body {
 .event-list {
   flex-direction: column;
   background-color: #fff;
-  width: 23%;
+  width: 25rem;
   min-height: 100%;
   overflow: scroll;
   overflow-x: hidden;
@@ -283,7 +283,7 @@ body {
 /*Form registro*/
 
 .form-register {
-  height: 60vh;
+  height: 30rem;
   width: 25rem;
   margin-top: 7rem;
   right: 6rem;
@@ -434,7 +434,7 @@ body {
   justify-content: center;
   flex-direction: column;
   width: 40rem;
-  height: 28vh;
+  height: 10rem;
   background-color: #fff;
   pointer-events: none;
   -webkit-box-shadow: 1px 4px 21px -7px rgba(0,0,0,0.51);
