@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const Point = require("../models/Point");
 const UserNeo4j = require("../models/UserNeo4j");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -49,8 +50,13 @@ const login = async (req, res) => {
           const token = jwt.sign({ user: user }, process.env.SECRET, {
             expiresIn: 86400,
           });
+          console.log(token);
           const admin = email == process.env.ADMIN;
-          res.send({ token: `Bearer ${token}`, admin: admin, id: user._id.toHexString() });
+          res.send({
+            token: `Bearer ${token}`,
+            admin: admin,
+            id: user._id.toHexString(),
+          });
           return;
         }
         res.send({ error: "Senha errada" });
@@ -69,8 +75,28 @@ const curtir = async (req, res) => {
   res.send("ok");
 };
 
+const eventosCurtidos = async (req, res) => {
+  let user;
+  const token = req.get("authorization");
+  if (token) {
+    try {
+      user = jwt.verify(token.split(" ")[1], process.env.SECRET);
+      const eventos = await UserNeo4j.eventosCurtidos(user.user._id);
+      const nomesDosEventos = [];
+      for (let evento of eventos) {
+        const eventosMongo = await Point.findById(evento);
+        nomesDosEventos.push(eventosMongo.titulo);
+      }
+      res.send(nomesDosEventos);
+      return;
+    } catch (e) {}
+  }
+  res.send({ error: "Sem recomendações" });
+};
+
 module.exports = {
   criarUsuario,
   login,
   curtir,
+  eventosCurtidos,
 };
