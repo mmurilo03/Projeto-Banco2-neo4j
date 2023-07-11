@@ -700,7 +700,12 @@ formCreateButton.addEventListener("click", async () => {
       formCreateButton.style.background = "#183f61"; //blue
     }, 2000);
   } else {
-    formCreateButton.textContent = "Cadastre-se!";
+    formCreateButton.style.background = "#53a653"; //green
+    formCreateButton.textContent = "Cadastrado!";
+    setTimeout(() => {
+      formCreateButton.textContent = "Cadastre-se!";
+      formCreateButton.style.background = "#183f61"; //blue
+    }, 2000);
   }
 });
 
