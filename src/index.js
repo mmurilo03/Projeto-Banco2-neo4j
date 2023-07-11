@@ -550,6 +550,7 @@ async function createCard(element) {
 
   likeButton.addEventListener("click", async () => {
     if (token.token) {
+      usersLiked.textContent=""
       await curtir(element);
       removeCardEvents();
       removeMarker();
